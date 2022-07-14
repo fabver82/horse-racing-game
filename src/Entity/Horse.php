@@ -102,6 +102,20 @@ class Horse
     {
         return $this->form;
     }
+    public function getFormStr(): ?String
+    {
+
+        switch (true) {
+            case ($this->form < 3):
+                return 'Poor';
+            case ($this->form < 5):
+                return 'Average';
+            case ($this->form < 8):
+                return 'Good';
+            case ($this->form <= 10):
+                return 'Excellent';
+        }
+    }
 
     public function setForm(float $form): self
     {
@@ -120,6 +134,11 @@ class Horse
         $this->fitness = $fitness;
 
         return $this;
+    }
+
+    public function getTotalPoint()
+    {
+        return ($this->getSpeed() * 1.5) + ($this->getEndurance() * 1.5) + ($this->getForm() * 2) + $this->getFitness();
     }
 
     /**

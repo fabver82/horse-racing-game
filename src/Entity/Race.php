@@ -130,4 +130,30 @@ class Race
 
         return $this;
     }
+    private function getTotalPoint()
+    {
+        $totalPoint = 0;
+        foreach ($this->horses as $horse) {
+            $totalPoint += $horse->getTotalPoint();
+        }
+        return $totalPoint;
+    }
+    public function getOdds()
+    {
+        $totalPoint = $this->getTotalPoint();
+        $average = $totalPoint / 10;
+        $odds = [];
+
+        foreach ($this->horses as $horse) {
+            $totalHorse = $horse->getTotalPoint();
+            $diff = $totalHorse - $average;
+            $percent = 10 + $diff;
+            if ($percent < 0) {
+                $percent = - ($percent / (10 - $percent));
+            }
+            $odd = round(1 / ($percent / 100), 0, PHP_ROUND_HALF_ODD);
+            array_push($odds, $odd);
+        }
+        return $odds;
+    }
 }
