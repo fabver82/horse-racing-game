@@ -11,6 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 class HomeController extends AbstractController
 {
     private $requestStack;
@@ -43,8 +49,21 @@ class HomeController extends AbstractController
     {
         $session = $this->requestStack->getSession();
         $race = $session->get('newRace');
+
         return $this->render('home/play.html.twig', [
             'race' => $race,
         ]);
+    }
+    #[Route('/api/horses', name: 'race_data', methods: ['GET'])]
+    public function race_data(): JsonResponse
+    {
+        $encoder = [new JsonEncoder()];
+        $normalizer = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizer, $encoder);
+        $session = $this->requestStack->getSession();
+        $race = $session->get('newRace');
+        $data = $serializer->serialize($race->getHorses(), 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 }
