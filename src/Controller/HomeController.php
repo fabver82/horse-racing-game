@@ -42,7 +42,7 @@ class HomeController extends AbstractController
     public function play(): Response
     {
         $session = $this->requestStack->getSession();
-        $race = $session->get('newrace');
+        $race = $session->get('newRace');
         return $this->render('home/play.html.twig', [
             'race' => $race,
         ]);

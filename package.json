@@ -1,0 +1,25 @@
+{
+  "name": "horse-riding-game",
+  "version": "1.0.0",
+  "description": "game where user has to bet on the winner",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabver82/horse-racing-game.git"
+  },
+  "author": "Fabien Vermeiren",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fabver82/horse-racing-game/issues"
+  },
+  "homepage": "https://github.com/fabver82/horse-racing-game#readme",
+  "dependencies": {
+    "phaser": "^3.55.2"
+  }
+}

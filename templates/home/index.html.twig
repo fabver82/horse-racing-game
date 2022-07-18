@@ -2,7 +2,7 @@
 {% block body %}
     <section>
         <h2>Next Race:{{race.length}}</h2>
-        <a href='#'>Start Race</a>
+        <a href='{{path('play')}}'>Start Race</a>
     </section>
     <section>
         {% for horse in race.horses %}

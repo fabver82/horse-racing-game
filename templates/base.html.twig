@@ -15,11 +15,13 @@
         {% endblock %}
     </head>
     <body>
-        <header>
-            <nav>
-                <h1>{{title}}</h1>
-            </nav>
-        </header>
+        {% block header %}
+            <header>
+                <nav>
+                    <h1>{{title}}</h1>
+                </nav>
+            </header>
+        {% endblock %}
         {% block body %}
         
         {% endblock %}
