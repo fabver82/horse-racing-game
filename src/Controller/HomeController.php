@@ -24,17 +24,17 @@ class HomeController extends AbstractController
 
     private function getNewRace(HorseRepository $horseRepo): Race
     {
-        $race = new Race();
+        $race = new Race($horseRepo);
         $lengths = array(900, 1200, 1500, 1800);
         $race->setLength($lengths[random_int(0, count($lengths) - 1)]);
 
         // get 10 random horses from the DB
-        $allHorses = $horseRepo->findAll();
-        for ($i = 0; $i < 10; $i++) {
-            $randId = random_int(0, count($allHorses) - 1);
-            $randHorse = array_splice($allHorses, $randId, 1)[0];
-            $race->addHorse($randHorse);
-        }
+        // $allHorses = $horseRepo->findAll();
+        // for ($i = 0; $i < 10; $i++) {
+        //     $randId = random_int(0, count($allHorses) - 1);
+        //     $randHorse = array_splice($allHorses, $randId, 1)[0];
+        //     $race->addHorse($randHorse);
+        // }
 
         return $race;
     }

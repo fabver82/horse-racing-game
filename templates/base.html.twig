@@ -26,14 +26,12 @@
             <a href='#'>Start Race</a>
         </section>
         <section>
-            {% set odds = race.getOdds %}
-            {% dump(odds)%}
             {% for horse in race.horses %}
                 <div> 
                     <img src='./image/horse/character4.png' width='35' alt='{{horse.name}} image'>
                     {{horse.name}}
                     {{horse.getFormStr}}
-                    {{odds[loop.index-1]}}/1
+                    {{horse.odd}}/1
                 </div>
 
             {% endfor %}

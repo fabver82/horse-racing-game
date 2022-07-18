@@ -39,8 +39,11 @@ class Horse
     #[ORM\OneToMany(mappedBy: 'horse', targetEntity: Bet::class)]
     private $bets;
 
+    private $odd;
+
     public function __construct()
     {
+        $this->odd = null;
         $this->races = new ArrayCollection();
         $this->bets = new ArrayCollection();
     }
@@ -139,6 +142,16 @@ class Horse
     public function getTotalPoint()
     {
         return ($this->getSpeed() * 1.5) + ($this->getEndurance() * 1.5) + ($this->getForm() * 2) + $this->getFitness();
+    }
+
+    public function getOdd()
+    {
+        return $this->odd;
+    }
+    public function setOdd($odd): self
+    {
+        $this->odd = $odd;
+        return  $this;
     }
 
     /**

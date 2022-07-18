@@ -30,10 +30,18 @@ class Race
     #[ORM\OneToMany(mappedBy: 'race', targetEntity: Bet::class)]
     private $bets;
 
-    public function __construct()
+    public function __construct($horseRepo)
     {
         $this->horses = new ArrayCollection();
         $this->bets = new ArrayCollection();
+
+        $allHorses = $horseRepo->findAll();
+        for ($i = 0; $i < 10; $i++) {
+            $randId = random_int(0, count($allHorses) - 1);
+            $randHorse = array_splice($allHorses, $randId, 1)[0];
+            $this->addHorse($randHorse);
+        }
+        $this->setOdds();
     }
 
     public function getId(): ?int
@@ -138,11 +146,10 @@ class Race
         }
         return $totalPoint;
     }
-    public function getOdds()
+    private function setOdds()
     {
         $totalPoint = $this->getTotalPoint();
         $average = $totalPoint / 10;
-        $odds = [];
 
         foreach ($this->horses as $horse) {
             $totalHorse = $horse->getTotalPoint();
@@ -152,8 +159,8 @@ class Race
                 $percent = - ($percent / (10 - $percent));
             }
             $odd = round(1 / ($percent / 100), 0, PHP_ROUND_HALF_ODD);
-            array_push($odds, $odd);
+            // array_push($odds, $odd);
+            $horse->setOdd($odd);
         }
-        return $odds;
     }
 }
