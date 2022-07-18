@@ -8,6 +8,12 @@
             type: Phaser.AUTO,
             width: 667,
             height: 375,
+            physics: {
+            default: 'arcade',
+            arcade: {
+                debug: true,
+            }
+    },
             scene: {
                 preload: preload,
                 create: create,
@@ -16,19 +22,50 @@
         };
 
         var game = new Phaser.Game(config);
-
+        var horse;
         function preload ()
         {
             this.load.image('lanes','image/game_asset/lanes.png');
+            this.load.image('horseStand01','image/game_asset/horses/HorseStand01.png');
+            for (let i=1;i<=12;i++){
+                this.load.image(`horse1-${i}`,`image/game_asset/horses/horses_sprites/Horse1-${i}.png`);
+            }
         }
 
         function create ()
         {
             this.add.image(0, 0, 'lanes').setOrigin(0, 0);
+            {# this.add.image(0,10,'horseStand01').setOrigin(0, 0).setScale(0.25,0.25); #}
+            this.anims.create({
+            key: 'run',
+            frames: [
+                { key: 'horse1-1' },
+                { key: 'horse1-2' },
+                { key: 'horse1-3' },
+                { key: 'horse1-4' },
+                { key: 'horse1-5' },
+                { key: 'horse1-6' },
+                { key: 'horse1-7' },
+                { key: 'horse1-8' },
+                { key: 'horse1-9' },
+                { key: 'horse1-10' },
+                { key: 'horse1-11' },
+                { key: 'horse1-12' }
+            ],
+            frameRate: 16,
+            repeat: -1
+            });
+
+            horse = this.physics.add.sprite(0, 10, 'horse1')
+            .setOrigin(0, 0)
+            .setScale(0.25,0.25)
+            .play('run');
+
         }
 
         function update ()
         {
+            horse.setVelocityX(300);
         }   
     </script>
 {% endblock %}
