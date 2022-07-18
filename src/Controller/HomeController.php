@@ -9,16 +9,24 @@ use App\Repository\RaceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class HomeController extends AbstractController
 {
+    private $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
     #[Route('/', name: 'home')]
     public function index(HorseRepository $horseRepo): Response
     {
-
+        $session = $this->requestStack->getSession();
+        $race = $session->get('newRace', $this->getNewRace($horseRepo));
+        $session->set('newRace', $race);
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-            'race' => $this->getNewRace($horseRepo),
+            'race' => $race,
         ]);
     }
 
@@ -28,14 +36,15 @@ class HomeController extends AbstractController
         $lengths = array(900, 1200, 1500, 1800);
         $race->setLength($lengths[random_int(0, count($lengths) - 1)]);
 
-        // get 10 random horses from the DB
-        // $allHorses = $horseRepo->findAll();
-        // for ($i = 0; $i < 10; $i++) {
-        //     $randId = random_int(0, count($allHorses) - 1);
-        //     $randHorse = array_splice($allHorses, $randId, 1)[0];
-        //     $race->addHorse($randHorse);
-        // }
-
         return $race;
+    }
+    #[Route('/play', name: 'play')]
+    public function play(): Response
+    {
+        $session = $this->requestStack->getSession();
+        $race = $session->get('newrace');
+        return $this->render('home/play.html.twig', [
+            'race' => $race,
+        ]);
     }
 }

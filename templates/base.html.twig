@@ -21,21 +21,7 @@
             </nav>
         </header>
         {% block body %}
-        <section>
-            <h2>Next Race:{{race.length}}</h2>
-            <a href='#'>Start Race</a>
-        </section>
-        <section>
-            {% for horse in race.horses %}
-                <div> 
-                    <img src='./image/horse/character4.png' width='35' alt='{{horse.name}} image'>
-                    {{horse.name}}
-                    {{horse.getFormStr}}
-                    {{horse.odd}}/1
-                </div>
-
-            {% endfor %}
-        </section>
+        
         {% endblock %}
         
     </body>
