@@ -57,7 +57,7 @@
         {
             this.load.image('lanes','image/game_asset/lanes.png');
             horses.forEach((horse,index)=>{
-                {# this.load.image(`horseStand${index+1}`,`image/game_asset/horses/HorseStand${index+1}.png`); #}
+                this.load.image(`horseStand${index+1}`,`image/game_asset/horses/HorseStand${index+1}.png`);
                 for (let i=1;i<=12;i++){
                     this.load.image(`horse${index+1}-${i}`,`image/game_asset/horses/horses_sprites/Horse${index+1}-${i}.png`);
                 }
@@ -69,11 +69,12 @@
         function create ()
         {
             this.add.image(0, 0, 'lanes').setOrigin(0, 0);
-            horses.forEach((horse,index)=>{
-                {# this.add.image(0,(10+(20*(index))),`horseStand${index+1}`).setOrigin(0, 0).setScale(0.25,0.25); #}
+            horses.forEach((horse,index)=>
+            {
+                this.add.image(0,(10+(20*(index))),`horseStand${index+1}`).setOrigin(0, 0).setScale(0.25,0.25);
             
                 this.anims.create({
-                key: 'run',
+                key: `runHorse${index+1}`,
                 name:`horse${index+1}`,
                 frames: [
                     { key: `horse${index+1}-1` },
@@ -92,20 +93,28 @@
                 frameRate: 16,
                 repeat: -1
                 });
-                horse["sprite"] = this.physics.add.sprite(0, 10+(20*(index)), `horse${index+1}`)
+                
+                
+                console.log(horse['sprite'])
+            });
+            horses.forEach((horse,index)=>
+            {
+                horse["sprite"] = this.physics.add.sprite(0, 10+(20*index), `horse${index+1}`)
                 .setOrigin(0, 0)
                 .setScale(0.25,0.25)
-                .play('run');
-                
+                .play(`runHorse${index+1}`);
             })
-            console.log(horses)
+            console.log(horses);
                 
         }
 
         function update ()
         {
            
-
+            horses.forEach((horse,index)=>
+            {
+                horse.sprite.body.setVelocityX(160);
+            });
             
         }   
     </script>
