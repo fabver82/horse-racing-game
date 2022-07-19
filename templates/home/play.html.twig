@@ -2,36 +2,35 @@
 {% block header %}
 {% endblock %}
 {% block body %}
-    {# {{dump(race)}} #}
     <script src="./phaser.min.js"></script>
     <script type="text/javascript">
-        
-    var config = {
-        type: Phaser.AUTO,
-        width: 667,
-        height: 375,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                debug: true
-            }
-        },
-        scene: {
-            preload: preload,
-            create: create,
-            update: update
-        }
-    };
-
-        var game=new Phaser.Game(config);
-        var horse;
         async function getHorses(){
             let response = await fetch('/api/horses');
             let data = await response.json();
-            game = new Phaser.Game(config);
-            return data;
+            return JSON.parse(data);
         };
-        let horses =  [
+        let horses =  getHorses();
+        var config = {
+            type: Phaser.AUTO,
+            width: 667,
+            height: 375,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    debug: true
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        var game= new Phaser.Game(config);
+        
+        
+        {# let horses =  [
             { 
                 "id":22,
                 "name":"joker",
@@ -52,68 +51,83 @@
                 "fitness":2.45,
                 "odd":7
             }
-        ];
+        ]; #}
+
         function preload ()
         {
+            console.log('preload')
             this.load.image('lanes','image/game_asset/lanes.png');
-            horses.forEach((horse,index)=>{
-                this.load.image(`horseStand${index+1}`,`image/game_asset/horses/HorseStand${index+1}.png`);
-                for (let i=1;i<=12;i++){
-                    this.load.image(`horse${index+1}-${i}`,`image/game_asset/horses/horses_sprites/Horse${index+1}-${i}.png`);
-                }
+            horses.then(horses=>{
+                horses.forEach((horse,index)=>{
+                    if(index<=1){
+                        this.load.image(`horseStand${index+1}`,`image/game_asset/horses/HorseStand${index+1}.png`);
+                        for (let i=1;i<=12;i++){
+                            this.load.image(`horse${index+1}-${i}`,`image/game_asset/horses/horses_sprites/Horse${index+1}-${i}.png`);
+                        }
+                    }
+                })
             })
-
             
         }
 
         function create ()
         {
+            console.log('create');
             this.add.image(0, 0, 'lanes').setOrigin(0, 0);
-            horses.forEach((horse,index)=>
-            {
-                this.add.image(0,(10+(20*(index))),`horseStand${index+1}`).setOrigin(0, 0).setScale(0.25,0.25);
-            
-                this.anims.create({
-                key: `runHorse${index+1}`,
-                name:`horse${index+1}`,
-                frames: [
-                    { key: `horse${index+1}-1` },
-                    { key: `horse${index+1}-2` },
-                    { key: `horse${index+1}-3` },
-                    { key: `horse${index+1}-4` },
-                    { key: `horse${index+1}-5` },
-                    { key: `horse${index+1}-6` },
-                    { key: `horse${index+1}-7` },
-                    { key: `horse${index+1}-8` },
-                    { key: `horse${index+1}-9` },
-                    { key: `horse${index+1}-10` },
-                    { key: `horse${index+1}-11` },
-                    { key: `horse${index+1}-12` }
-                ],
-                frameRate: 16,
-                repeat: -1
+            horses.then(horses=>{
+                horses.forEach((horse,index)=>
+                {
+                    if (index<=1){
+                        this.add.image(0,(10+(20*(index))),`horseStand${index+1}`).setOrigin(0, 0).setScale(0.25,0.25);
+                        this.anims.create({
+                        key: `runHorse${index+1}`,
+                        name:`horse${index+1}`,
+                        frames: [
+                            { key: `horse${index+1}-1` },
+                            { key: `horse${index+1}-2` },
+                            { key: `horse${index+1}-3` },
+                            { key: `horse${index+1}-4` },
+                            { key: `horse${index+1}-5` },
+                            { key: `horse${index+1}-6` },
+                            { key: `horse${index+1}-7` },
+                            { key: `horse${index+1}-8` },
+                            { key: `horse${index+1}-9` },
+                            { key: `horse${index+1}-10` },
+                            { key: `horse${index+1}-11` },
+                            { key: `horse${index+1}-12` }
+                        ],
+                        frameRate: 16,
+                        repeat: -1
+                        });
+                    }
+                    
                 });
-                
-                
-                console.log(horse['sprite'])
             });
-            horses.forEach((horse,index)=>
-            {
-                horse["sprite"] = this.physics.add.sprite(0, 10+(20*index), `horse${index+1}`)
-                .setOrigin(0, 0)
-                .setScale(0.25,0.25)
-                .play(`runHorse${index+1}`);
-            })
-            console.log(horses);
-                
+
+            horses.then(horses =>{
+                horses.forEach((horse,index)=>
+                {
+                    if(index <=1)
+                    {
+                        horse["sprite"] = this.physics.add.sprite(0, 10+(20*index), `horse${index+1}`)
+                        .setOrigin(0, 0)
+                        .setScale(0.25,0.25)
+                        .play(`runHorse${index+1}`);
+                    }
+                })
+            });
         }
 
         function update ()
         {
            
-            horses.forEach((horse,index)=>
-            {
-                horse.sprite.body.setVelocityX(160);
+            horses.then(horses=>{
+                horses.forEach((horse,index)=>
+                {
+                    if(index<=1){
+                        horse.sprite.body.setVelocityX(160);
+                    }
+                });
             });
             
         }   

@@ -62,7 +62,10 @@ class HomeController extends AbstractController
         $serializer = new Serializer($normalizer, $encoder);
         $session = $this->requestStack->getSession();
         $race = $session->get('newRace');
-        $data = $serializer->serialize($race->getHorses(), 'json');
+        $horses = $race->getHorses();
+        dump($horses);
+        // $data = json_encode($horses);
+        $data = $serializer->serialize($horses, "json");
 
         return new JsonResponse($data, Response::HTTP_OK);
     }
