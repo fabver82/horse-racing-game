@@ -54,7 +54,7 @@ class HomeController extends AbstractController
             'race' => $race,
         ]);
     }
-    #[Route('/api/horses', name: 'race_data', methods: ['GET'])]
+    #[Route('/api/race', name: 'race_data', methods: ['GET'])]
     public function race_data(): JsonResponse
     {
         $encoder = [new JsonEncoder()];
@@ -62,10 +62,7 @@ class HomeController extends AbstractController
         $serializer = new Serializer($normalizer, $encoder);
         $session = $this->requestStack->getSession();
         $race = $session->get('newRace');
-        $horses = $race->getHorses();
-        dump($horses);
-        // $data = json_encode($horses);
-        $data = $serializer->serialize($horses, "json");
+        $data = $serializer->serialize($race, "json");
 
         return new JsonResponse($data, Response::HTTP_OK);
     }

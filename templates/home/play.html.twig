@@ -4,12 +4,16 @@
 {% block body %}
     <script src="./phaser.min.js"></script>
     <script type="text/javascript">
-        async function getHorses(){
-            let response = await fetch('/api/horses');
+        async function getRace(){
+            let response = await fetch('/api/race');
             let data = await response.json();
             return JSON.parse(data);
         };
-        let horses =  getHorses();
+
+        let horses =  getRace().then(race=>{
+            console.log(race);
+            return race.horses;
+        });
         var config = {
             type: Phaser.AUTO,
             width: 667,
